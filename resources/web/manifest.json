@@ -1,11 +1,11 @@
 {
-    "name": "rustdesk",
-    "short_name": "rustdesk",
+    "name": "RustDesk Web Client",
+    "short_name": "RustDesk",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "Remote Desktop.",
+    "background_color": "#111827",
+    "theme_color": "#2563eb",
+    "description": "Secure self-hosted remote desktop access.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

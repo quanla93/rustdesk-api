@@ -26,9 +26,9 @@ desktop software that provides self-hosted solutions.
     - Login
     - Address Book
     - Groups
-    - Authorized login, 
-      - supports `GitHub`, `Google` and `OIDC` login, 
-      - supports `web admin` authorized login, 
+    - Authorized login,
+      - supports `GitHub`, `Google` and `OIDC` login,
+      - supports `web admin` authorized login,
       - supports LDAP(test AD and openladp) if API Server config
     - i18n
 - Web Admin
@@ -98,12 +98,12 @@ displaying data.Frontend code is available at [rustdesk-api-web](https://github.
 6. OAuth support: Currently, `GitHub`, `Google` and `OIDC`  are supported. You need to create an `OAuth App` and configure it in
    the admin panel.
     - For `Google` and `Github`, you don't need to fill the `Issuer` and `Scpoes`
-    - For `OIDC`, you must set the `Issuer`. And `Scopes` is optional which default is `openid,email,profile`, please make sure this `Oauth App` can access `sub`, `email` and `preferred_username`
+    - For `OIDC`, you must set the `Issuer`. And `Scopes` is optional which default is `openid,email,profile`, please make sure this `OAuth App` can access `sub`, `email` and `preferred_username`
     - Create a `GitHub OAuth App`
       at `Settings` -> `Developer settings` -> `OAuth Apps` -> `New OAuth App` [here](https://github.com/settings/developers).
     - Set the `Authorization callback URL` to `http://<your server[:port]>/api/oidc/callback`,
       e.g., `http://127.0.0.1:21114/api/oidc/callback`.
-   
+
 7. Login logs
 8. Connection logs
 9. File transfer logs
@@ -117,7 +117,7 @@ displaying data.Frontend code is available at [rustdesk-api-web](https://github.
     * Custom commands can be executed
 
 11. **LDAP Support**, When you setup the LDAP(test for OpenLDAP and AD), you can login with the LDAP's user. https://github.com/lejianwen/rustdesk-api/issues/114 , if LDAP fail fallback local user
-  
+
 ### Web Client:
 
 1. If you're already logged into the admin panel, the web client will log in automatically.
@@ -148,9 +148,9 @@ displaying data.Frontend code is available at [rustdesk-api-web](https://github.
 ### Configuration
 
 * [Config File](./conf/config.yaml)
-* Modify the configuration in `conf/config.yaml`. 
+* Modify the configuration in `conf/config.yaml`.
 * If `gorm.type` is set to `sqlite`, MySQL-related configurations are not required.
-* Language support: `en` and `zh-CN` are supported. The default is `zh-CN`.
+* Language support: `en` and `zh-CN` are supported. The default is `en`.
 
 
 ### Environment Variables
@@ -207,7 +207,7 @@ The table below does not list all configurations. Please refer to the configurat
 
 1. Run directly with Docker. Configuration can be modified by mounting the config file `/app/conf/config.yaml`, or by
    using environment variables to override settings.
-    
+
     ```bash
     docker run -d --name rustdesk-api -p 21114:21114 \
     -v /data/rustdesk/api:/app/data \
@@ -308,11 +308,11 @@ Download the release from [release](https://github.com/lejianwen/rustdesk-api/re
        - RUSTDESK_API_JWT_KEY=xxxxxx # jwt key
      volumes:
        - /data/rustdesk/server:/data
-       - /data/rustdesk/api:/app/data #将数据库挂载
+       - /data/rustdesk/api:/app/data # mount the database
      networks:
        - rustdesk-net
      restart: unless-stopped
-       
+
 ```
 ## Others
 

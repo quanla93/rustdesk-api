@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OauthFailed - RustDesk API</title>
+    <title>OAuthFailed - RustDesk API</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -58,11 +58,11 @@
     </style>
     <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css">
     <script>
-        var lang = navigator.language || navigator.userLanguage || 'zh-CN';
-        var title = 'OauthFailed'
+        var lang = navigator.language || navigator.userLanguage || 'en';
+        var title = 'OAuthFailed'
         var msg = '{{.message}}'
         var btn = 'Close'
-        document.writeln('<script src="/api/oidc/msg?lang=' + lang + '&msg=' + msg + '&title=OauthFailed"><\/script>');
+        document.writeln('<script src="/api/oidc/msg?lang=' + lang + '&msg=' + msg + '&title=OAuthFailed"><\/script>');
     </script>
 </head>
 <body>
@@ -76,6 +76,7 @@
     document.title = title + ' - RustDesk API';
     document.getElementById('h1').innerText = title;
     document.getElementById('msg').innerText = msg;
+    document.getElementById('btn').innerText = btn;
 </script>
 </body>
 </html>
