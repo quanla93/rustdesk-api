@@ -28,6 +28,8 @@ on:
         required: true
         default: 'https://github.com/lejianwen/rustdesk-api-web'
   push:
+    branches:
+      - master
     tags:
       - 'v*.*.*'  # Trigger the workflow when pushing a version tag, for example v1.0.0
       - 'test*'
