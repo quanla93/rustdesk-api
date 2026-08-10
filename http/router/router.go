@@ -17,7 +17,16 @@ func WebInit(g *gin.Engine) {
 
 	if global.Config.App.WebClient == 1 {
 		g.StaticFS("/webclient", http.Dir(global.Config.Gin.ResourcesPath+"/web"))
-		g.StaticFS("/webclient2", http.Dir(global.Config.Gin.ResourcesPath+"/web2"))
+		g.GET("/webclient2", redirectWebClient2)
+		g.GET("/webclient2/*filepath", redirectWebClient2)
 	}
 	g.StaticFS("/_admin", http.Dir(global.Config.Gin.ResourcesPath+"/admin"))
+}
+
+func redirectWebClient2(c *gin.Context) {
+	path := c.Param("filepath")
+	if path == "" || path == "/" {
+		path = "/"
+	}
+	c.Redirect(http.StatusMovedPermanently, "/webclient"+path)
 }
