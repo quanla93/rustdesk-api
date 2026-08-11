@@ -5,55 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OAuthSuccess - RustDesk API</title>
     <style>
+        :root {
+            color-scheme: light dark;
+            --page-bg: #f3f7f4;
+            --card-bg: #ffffff;
+            --text: #172033;
+            --muted: #596579;
+            --accent: #16a34a;
+            --accent-strong: #15803d;
+            --accent-soft: #dcfce7;
+            --shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --page-bg: #07130b;
+                --card-bg: #101b14;
+                --text: #f4fbf6;
+                --muted: #a8b7ad;
+                --accent: #4ade80;
+                --accent-strong: #22c55e;
+                --accent-soft: rgba(74, 222, 128, 0.16);
+                --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: #f5f5f5;
+            min-height: 100vh;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 24px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background:
+                radial-gradient(circle at 20% 20%, var(--accent-soft), transparent 32%),
+                var(--page-bg);
+            color: var(--text);
         }
 
-        .success-container {
+        .message-card {
+            width: min(420px, 100%);
             text-align: center;
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 90%;
+            background: var(--card-bg);
+            padding: 32px 28px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
         }
 
-        .checkmark {
-            color: #4CAF50;
-            font-size: 4rem;
-            margin-bottom: 1rem;
+        .status-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .status-icon svg {
+            width: 42px;
+            height: 42px;
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 1rem;
+            margin: 0 0 12px;
+            font-size: 1.45rem;
+            line-height: 1.25;
         }
 
         p {
-            color: #666;
+            margin: 0 0 24px;
+            color: var(--muted);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
         }
 
         .return-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 22px;
+            border-radius: 999px;
+            background-color: var(--accent);
+            color: #ffffff;
+            font-weight: 600;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
         .return-link:hover {
-            background-color: #45a049;
+            background-color: var(--accent-strong);
+            transform: translateY(-1px);
         }
     </style>
     <script>
@@ -65,8 +113,12 @@
     </script>
 </head>
 <body>
-<div class="success-container">
-    <i class="fas fa-check-circle checkmark"></i>
+<div class="message-card">
+    <div class="status-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" role="img">
+            <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
     <h1 id="h1"></h1>
     <p id="msg"></p>
     <a href="javascript:window.close()" class="return-link" id="btn">Close</a>
