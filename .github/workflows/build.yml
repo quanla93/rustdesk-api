@@ -39,6 +39,10 @@ on:
         description: 'Web Client API Repository ref'
         required: true
         default: 'master'
+      EXPLICIT_RELEASE_TAG:
+        description: 'Explicit release tag to create (leave empty to use default tag logic)'
+        required: false
+        default: ''
   push:
     branches:
       - master
@@ -470,10 +474,15 @@ jobs:
     steps:
       - name: Resolve API image tag
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+          if [ -n "${{ github.event.inputs.EXPLICIT_RELEASE_TAG }}" ]; then
+            echo "API_TAG=${{ github.event.inputs.EXPLICIT_RELEASE_TAG }}" >> $GITHUB_ENV
+            echo "API_REF=${{ github.event.inputs.EXPLICIT_RELEASE_TAG }}" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             echo "API_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            echo "API_REF=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           else
             echo "API_TAG=latest" >> $GITHUB_ENV
+            echo "API_REF=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           fi
 
       - name: Trigger rustdesk-server workflow
@@ -484,6 +493,6 @@ jobs:
           gh api repos/quanla93/rustdesk-server/dispatches \
             -f event_type=rustdesk-api-updated \
             -f client_payload[api_image]="$API_IMAGE" \
-            -f client_payload[api_ref]="${GITHUB_REF_NAME}" \
+            -f client_payload[api_ref]="${API_REF}" \
             -f client_payload[source_repo]="${GITHUB_REPOSITORY}" \
             -f client_payload[source_run_id]="${GITHUB_RUN_ID}"
