@@ -43,6 +43,10 @@ on:
         description: 'Explicit release tag to create (leave empty to use default tag logic)'
         required: false
         default: ''
+      TRIGGER_COMMIT_MSG:
+        description: 'Commit message from upstream trigger'
+        required: false
+        default: ''
   push:
     branches:
       - master
@@ -495,4 +499,5 @@ jobs:
             -f client_payload[api_image]="$API_IMAGE" \
             -f client_payload[api_ref]="${API_REF}" \
             -f client_payload[source_repo]="${GITHUB_REPOSITORY}" \
-            -f client_payload[source_run_id]="${GITHUB_RUN_ID}"
+            -f client_payload[source_run_id]="${GITHUB_RUN_ID}" \
+            -f client_payload[commit_msg]="${{ github.event.inputs.TRIGGER_COMMIT_MSG || github.event.head_commit.message }}"
