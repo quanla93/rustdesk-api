@@ -28,9 +28,17 @@ on:
         required: false
         default: 'false'
       WEBCLIENT_SOURCE_LOCATION:
-        description: 'Web Client API Repository'
-        required: true
+        description: 'Web Client API Repository URL (legacy)'
+        required: false
         default: 'https://github.com/lejianwen/rustdesk-api-web'
+      WEBCLIENT_SOURCE_REPOSITORY:
+        description: 'Web Client API Repository (owner/repo)'
+        required: true
+        default: 'quanla93/rustdesk-api-web'
+      WEBCLIENT_SOURCE_REF:
+        description: 'Web Client API Repository ref'
+        required: true
+        default: 'master'
   push:
     branches:
       - master
@@ -41,6 +49,8 @@ on:
 env:
   LATEST_TAG: latest
   WEBCLIENT_SOURCE_LOCATION: ${{ github.event.inputs.WEBCLIENT_SOURCE_LOCATION || 'https://github.com/lejianwen/rustdesk-api-web' }}
+  WEBCLIENT_SOURCE_REPOSITORY: ${{ github.event.inputs.WEBCLIENT_SOURCE_REPOSITORY || 'quanla93/rustdesk-api-web' }}
+  WEBCLIENT_SOURCE_REF: ${{ github.event.inputs.WEBCLIENT_SOURCE_REF || 'master' }}
   BASE_IMAGE_NAMESPACE: ${{ github.event.inputs.BASE_IMAGE_NAMESPACE || github.repository_owner }}
   DOCKERHUB_IMAGE_NAMESPACE: ${{ github.event.inputs.DOCKERHUB_IMAGE_NAMESPACE || github.repository_owner }}
   GHCR_IMAGE_NAMESPACE: ${{ github.event.inputs.GHCR_IMAGE_NAMESPACE || github.repository_owner }}
@@ -65,9 +75,9 @@ jobs:
           fetch-depth: 0
       - uses: actions/checkout@v4
         with:
-          repository: lejianwen/rustdesk-api-web
+          repository: ${{ env.WEBCLIENT_SOURCE_REPOSITORY }}
           path: rustdesk-api-web
-          ref: master
+          ref: ${{ env.WEBCLIENT_SOURCE_REF }}
 
       - name: Set up Go environment
         uses: actions/setup-go@v4
@@ -451,3 +461,29 @@ jobs:
             ghcr.io/${{ env.GHCR_IMAGE_NAMESPACE }}/rustdesk-api:full-s6-arm64
           push: true
           amend: true
+
+  trigger-rustdesk-server:
+    name: Trigger rustdesk-server rebuild
+    needs: docker-manifest
+    if: ${{ (github.event.inputs.SKIP_GHCR || 'false') == 'false' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve API image tag
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "API_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "API_TAG=latest" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger rustdesk-server workflow
+        env:
+          GH_TOKEN: ${{ secrets.SERVER_REPO_DISPATCH_TOKEN }}
+        run: |
+          API_IMAGE="ghcr.io/${GHCR_IMAGE_NAMESPACE}/rustdesk-api:${API_TAG}"
+          gh api repos/quanla93/rustdesk-server/dispatches \
+            -f event_type=rustdesk-api-updated \
+            -f client_payload[api_image]="$API_IMAGE" \
+            -f client_payload[api_ref]="${GITHUB_REF_NAME}" \
+            -f client_payload[source_repo]="${GITHUB_REPOSITORY}" \
+            -f client_payload[source_run_id]="${GITHUB_RUN_ID}"
