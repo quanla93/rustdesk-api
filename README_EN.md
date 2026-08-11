@@ -79,7 +79,7 @@ Basic implementation of the PC client's primary interfaces.Supports the Personal
 ### Web Admin
 
 * The frontend and backend are separated to provide a user-friendly management interface, primarily for managing and
-displaying data.Frontend code is available at [rustdesk-api-web](https://github.com/lejianwen/rustdesk-api-web)
+displaying data.Frontend code is available at [rustdesk-api-web](https://github.com/quanla93/rustdesk-api-web)
 
 * Admin panel URL: `http://<your server[:port]>/_admin/`
 * For the initial installation, the admin username is `admin`, and the password will be printed in the console. You can change the password via the [command line](#CLI).
@@ -242,11 +242,11 @@ Download the release from [release](https://github.com/lejianwen/rustdesk-api/re
     ```
 
 3. Build the admin front-end (the front-end code is
-   in [rustdesk-api-web](https://github.com/lejianwen/rustdesk-api-web)):
+   in [rustdesk-api-web](https://github.com/quanla93/rustdesk-api-web)):
    ```bash
    cd resources
    mkdir -p admin
-   git clone https://github.com/lejianwen/rustdesk-api-web
+   git clone https://github.com/quanla93/rustdesk-api-web
    cd rustdesk-api-web
    npm install
    npm run build
