@@ -172,8 +172,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Changelog
-        if: startsWith(github.ref, 'refs/tags/') && github.event_name == 'push'
-        run: npx changelogithub # or changelogithub@0.12 if ensure the stable result
+        if: startsWith(github.ref, 'refs/tags/') && github.event_name == 'push' && matrix.job.goos == 'linux' && matrix.job.platform == 'amd64'
+        continue-on-error: true
+        run: npx changelogithub@0.12
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
